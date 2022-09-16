@@ -103,17 +103,39 @@ public:
   {
   }
 
-  void isLast()
+  bool isLast(int x, int y)
   {
+    for (int i = 0; i < UNIQUE_SHAPE; i++)
+    {
+      for (int j = 0; j < UNIQUE_SHAPE; j++)
+      {
+        int currX = x + i;
+        int bottom = y + j - 1;
+
+        if (bottom < 0)
+        {
+          // printf("return true!");
+          return true;
+        }
+        if (MAP[currX][bottom] == 'O')
+        {
+          // printf("return true!");
+          return true;
+        }
+      }
+    }
+    // getchar();
+    return false;
   }
 
   bool isIntersect(int x, int y)
   {
+    printf("x : %d | y : %d", x, y);
     // printf("Check intersecting!");
     // getchar();
-    for (int i = 0; i < x; i++)
+    for (int i = 0; i < UNIQUE_SHAPE; i++)
     {
-      for (int j = 0; j < y; j++)
+      for (int j = 0; j < UNIQUE_SHAPE; j++)
       {
         int currX = x + i;
         int currY = y + j;
@@ -123,29 +145,31 @@ public:
         }
         if (MAP[i + x][j + y] == 'O')
         {
+          // printf("return true!");
           return true;
         }
       }
     }
+    // getchar();
     return false;
   }
 
   void render()
   {
-    int shapeLength = array_length(matrix[state][0]);
+    // int shapeLength = array_length(matrix[state][0]);
     // printf("Shap length now : %d\n", shapeLength);
-    for (int i = 0; i < shapeLength; i++)
+    for (int i = 0; i < UNIQUE_SHAPE; i++)
     {
-      for (int j = 0; j < shapeLength; j++)
+      for (int j = 0; j < UNIQUE_SHAPE; j++)
       {
         char mapChar = MAP[i + row][j + col];
         char matrixChar = matrix[state][i][j];
 
-        // vaidate is matrix
-        // if (mapChar == ' ' && matrix[state][i][j] != ' ')
-        // {
-        MAP[i + row][j + col] = '*';
-        // }
+        // validate is matrix
+        if (mapChar == ' ' && matrix[state][i][j] != ' ')
+        {
+          MAP[i + row][j + col] = '*';
+        }
       }
     }
   }
@@ -214,7 +238,6 @@ void generatePiece()
 
 void game()
 {
-
   printf("Generating Piece...\n");
   generatePiece();
   printMap();
@@ -244,7 +267,6 @@ void game()
         currentShape->changeState();
       break;
     }
-    printf("Current Shape logic...");
     currentShape->logic();
 
     system("cls");
