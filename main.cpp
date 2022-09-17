@@ -86,7 +86,6 @@ public:
       {
         if (MAP[i][j] == '*')
         {
-          printf("Clearing Player!");
           MAP[i][j] = ' ';
         }
       }
@@ -130,9 +129,6 @@ public:
 
   bool isIntersect(int x, int y)
   {
-    printf("x : %d | y : %d", x, y);
-    // printf("Check intersecting!");
-    // getchar();
     for (int i = 0; i < UNIQUE_SHAPE; i++)
     {
       for (int j = 0; j < UNIQUE_SHAPE; j++)
@@ -150,7 +146,6 @@ public:
         }
       }
     }
-    // getchar();
     return false;
   }
 
