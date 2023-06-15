@@ -19,6 +19,8 @@ const int INITIAL_SPAWN_X = COLUMN / 2;
 const int INITIAL_SPAWN_Y = 1;
 const int INCREMENTED_SCORE = 500;
 int SCORE = 0;
+int FRAME = 0;
+int TOTAL_FRAME_TO_MOVE = 30;
 
 // Function Prototype
 void forceCls();
@@ -31,6 +33,7 @@ void printMap();
 void winSound();
 void moveSound();
 void gameLose();
+void checkMoving();
 void endScreen();
 
 char MAP[ROW + 2][COLUMN + 2] =
@@ -475,6 +478,19 @@ void endScreen()
   getch();
 }
 
+void checkMoving()
+{
+  FRAME += 1;
+  if (FRAME > TOTAL_FRAME_TO_MOVE)
+  {
+    if (currentShape)
+      currentShape->move("bottom");
+
+    printMap();
+    FRAME = 0;
+  }
+}
+
 void game()
 {
   generatePiece();
@@ -485,35 +501,35 @@ void game()
     // Disadvantage : make sleep betweeen the move (slower move)
 
     // moveSound();
-
-    char buffer;
-    buffer = getch();
-
-    if (buffer >= 65 && buffer <= 90)
+    checkMoving();
+    if (kbhit())
     {
-      buffer = buffer + 32;
+      char buffer;
+      buffer = getch();
+      if (buffer >= 65 && buffer <= 90)
+      {
+        buffer = buffer + 32;
+      }
+      switch (buffer)
+      {
+      case 'd':
+        if (currentShape)
+          currentShape->move("right");
+        break;
+      case 'a':
+        if (currentShape)
+          currentShape->move("left");
+        break;
+      case 's':
+        if (currentShape)
+          currentShape->move("bottom");
+        break;
+      case ' ':
+        if (currentShape)
+          currentShape->changeState();
+        break;
+      }
     }
-
-    switch (buffer)
-    {
-    case 'd':
-      if (currentShape)
-        currentShape->move("right");
-      break;
-    case 'a':
-      if (currentShape)
-        currentShape->move("left");
-      break;
-    case 's':
-      if (currentShape)
-        currentShape->move("bottom");
-      break;
-    case ' ':
-      if (currentShape)
-        currentShape->changeState();
-      break;
-    }
-
     if (currentShape->logic())
     {
       checkWin();
